@@ -1,0 +1,28 @@
+# Built outputs
+*.apk
+*.aab
+*.ap_
+*.dex
+
+# Build directories
+build/
+.gradle/
+captures/
+out/
+
+# Local config
+local.properties
+*.properties
+!gradle/wrapper/gradle-wrapper.properties
+
+# IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+.DS_Store
+Thumbs.db
+
+# Keystore
+*.jks
+*.keystore

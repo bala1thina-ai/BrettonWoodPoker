@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Poker chip icon: gold outer ring with dark felt center and a gold diamond emblem.
+  8 decorative notches on the rim (cardinal + diagonal) for an authentic chip look.
+  Viewport: 108x108, chip centered at (54,54).
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Gold outer chip body -->
+    <path
+        android:fillColor="#E2B96F"
+        android:pathData="M4,54 A50,50 0 1 0 104,54 A50,50 0 1 0 4,54 Z" />
+
+    <!-- Dark navy inner felt -->
+    <path
+        android:fillColor="#1A1A2E"
+        android:pathData="M18,54 A36,36 0 1 0 90,54 A36,36 0 1 0 18,54 Z" />
+
+    <!-- Rim notches at cardinal positions (dark navy dots on gold ring) -->
+    <!-- Top -->
+    <path android:fillColor="#1A1A2E"
+        android:pathData="M51,8 A3,3 0 1 0 57,8 A3,3 0 1 0 51,8 Z" />
+    <!-- Bottom -->
+    <path android:fillColor="#1A1A2E"
+        android:pathData="M51,100 A3,3 0 1 0 57,100 A3,3 0 1 0 51,100 Z" />
+    <!-- Left -->
+    <path android:fillColor="#1A1A2E"
+        android:pathData="M8,51 A3,3 0 1 0 14,51 A3,3 0 1 0 8,51 Z" />
+    <!-- Right -->
+    <path android:fillColor="#1A1A2E"
+        android:pathData="M94,51 A3,3 0 1 0 100,51 A3,3 0 1 0 94,51 Z" />
+    <!-- Upper-right -->
+    <path android:fillColor="#1A1A2E"
+        android:pathData="M82,22 A3,3 0 1 0 88,22 A3,3 0 1 0 82,22 Z" />
+    <!-- Lower-right -->
+    <path android:fillColor="#1A1A2E"
+        android:pathData="M82,82 A3,3 0 1 0 88,82 A3,3 0 1 0 82,82 Z" />
+    <!-- Lower-left -->
+    <path android:fillColor="#1A1A2E"
+        android:pathData="M20,82 A3,3 0 1 0 26,82 A3,3 0 1 0 20,82 Z" />
+    <!-- Upper-left -->
+    <path android:fillColor="#1A1A2E"
+        android:pathData="M20,22 A3,3 0 1 0 26,22 A3,3 0 1 0 20,22 Z" />
+
+    <!-- Gold diamond emblem centered -->
+    <path
+        android:fillColor="#E2B96F"
+        android:pathData="M54,32 L70,54 L54,76 L38,54 Z" />
+
+    <!-- Small dark diamond outline inside for depth -->
+    <path
+        android:fillColor="#1A1A2E"
+        android:pathData="M54,42 L63,54 L54,66 L45,54 Z" />
+
+</vector>

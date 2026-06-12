@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(winget install Google.AndroidCommandLineTools --accept-source-agreements --accept-package-agreements)",
+      "PowerShell(winget search \"android sdk\" 2>&1)"
+    ]
+  }
+}
