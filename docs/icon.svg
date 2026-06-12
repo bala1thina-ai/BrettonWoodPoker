@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background circle -->
+  <circle cx="256" cy="256" r="256" fill="#16213E"/>
+  <!-- Outer ring -->
+  <circle cx="256" cy="256" r="230" fill="none" stroke="#E2B96F" stroke-width="20"/>
+  <!-- Inner chip ring -->
+  <circle cx="256" cy="256" r="180" fill="#0F3460"/>
+  <circle cx="256" cy="256" r="160" fill="none" stroke="#E2B96F" stroke-width="8"/>
+  <!-- Center -->
+  <circle cx="256" cy="256" r="110" fill="#16213E"/>
+  <!-- BW text -->
+  <text x="256" y="240" text-anchor="middle" fill="#E2B96F" font-size="72" font-weight="900" font-family="-apple-system, Arial, sans-serif" letter-spacing="-2">BW</text>
+  <text x="256" y="300" text-anchor="middle" fill="#E2B96F" font-size="30" font-weight="600" font-family="-apple-system, Arial, sans-serif" letter-spacing="4">POKER</text>
+</svg>

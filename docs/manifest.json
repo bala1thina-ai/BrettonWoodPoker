@@ -1,0 +1,18 @@
+{
+  "name": "BrettonWood Poker",
+  "short_name": "BW Poker",
+  "description": "Poker session tracker for home games",
+  "start_url": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1A1A2E",
+  "theme_color": "#16213E",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
