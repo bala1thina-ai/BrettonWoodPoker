@@ -10,393 +10,464 @@
   <title>BrettonWood Poker</title>
   <link rel="manifest" href="manifest.json">
   <style>
-    /* ── Keyframes ────────────────────────────────────────────────── */
-    @keyframes poolWave {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    @keyframes poolWave    { 0%,100%{background-position:0% 50%} 50%{background-position:100% 50%} }
+    @keyframes goldShimmer { 0%{background-position:-300% center} 100%{background-position:300% center} }
+    @keyframes fabGlow     { 0%,100%{box-shadow:0 0 18px 4px rgba(255,215,0,.55),0 4px 20px rgba(0,0,0,.5)} 50%{box-shadow:0 0 36px 10px rgba(255,215,0,.85),0 4px 20px rgba(0,0,0,.5)} }
+    @keyframes fabRipple   { 0%{opacity:.7;transform:scale(1)} 100%{opacity:0;transform:scale(1.7)} }
+    @keyframes waterFall   { 0%{transform:translateY(-220px)} 100%{transform:translateY(420px)} }
+    @keyframes bubbleRise  { 0%{transform:translateY(0) scale(1);opacity:.5} 100%{transform:translateY(-160px) scale(.4);opacity:0} }
+    @keyframes suitFloat   { 0%,100%{transform:translateY(0) rotate(0deg);opacity:.07} 50%{transform:translateY(-18px) rotate(12deg);opacity:.13} }
+    @keyframes allInPulse  { 0%,100%{filter:drop-shadow(0 0 4px #FFD700) drop-shadow(0 0 10px #FF6600)} 50%{filter:drop-shadow(0 0 10px #FFD700) drop-shadow(0 0 22px #FF6600)} }
+
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+    html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;overscroll-behavior:none}
+    button{font-family:inherit;cursor:pointer}
+    input{font-family:inherit}
+
+    body{
+      color:#fff;
+      background:linear-gradient(135deg,#051020 0%,#082040 20%,#0A2E60 45%,#0C3878 60%,#082040 80%,#051020 100%);
+      background-size:400% 400%;
+      animation:poolWave 12s ease infinite;
+      position:relative;overflow:hidden;
     }
-    @keyframes goldShimmer {
-      0%   { background-position: -300% center; }
-      100% { background-position: 300% center; }
+    body::before{
+      content:'';position:fixed;inset:0;
+      background-image:linear-gradient(rgba(0,210,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,210,255,.05) 1px,transparent 1px);
+      background-size:38px 38px;pointer-events:none;z-index:0;
     }
-    @keyframes fabGlow {
-      0%, 100% { box-shadow: 0 0 18px 4px rgba(255,215,0,.55), 0 4px 20px rgba(0,0,0,.5); }
-      50%       { box-shadow: 0 0 36px 10px rgba(255,215,0,.85), 0 4px 20px rgba(0,0,0,.5); }
-    }
-    @keyframes fabRipple {
-      0%   { opacity: .7; transform: scale(1); }
-      100% { opacity: 0;  transform: scale(1.7); }
-    }
-    @keyframes floatCard {
-      0%, 100% { transform: translateY(0)   rotate(-3deg); }
-      50%       { transform: translateY(-8px) rotate(3deg);  }
-    }
-    @keyframes floatCardR {
-      0%, 100% { transform: translateY(0)   rotate(3deg);  }
-      50%       { transform: translateY(-8px) rotate(-3deg); }
-    }
-    @keyframes waterRipple {
-      0%   { background-position: 0% 0%;   }
-      100% { background-position: 100% 100%; }
-    }
-    @keyframes suitFloat {
-      0%, 100% { transform: translateY(0)  rotate(0deg);   opacity: .06; }
-      50%       { transform: translateY(-20px) rotate(15deg); opacity: .12; }
+    .bg-suits{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+    .bg-suit{position:absolute;font-size:80px;color:rgba(255,215,0,1);animation:suitFloat 7s ease-in-out infinite}
+    .bg-suit:nth-child(1){top:5%;left:5%;font-size:60px;animation-delay:0s;animation-duration:8s}
+    .bg-suit:nth-child(2){top:15%;right:6%;font-size:90px;animation-delay:2s;animation-duration:10s}
+    .bg-suit:nth-child(3){top:45%;left:2%;font-size:55px;animation-delay:1s;animation-duration:7s}
+    .bg-suit:nth-child(4){top:60%;right:3%;font-size:70px;animation-delay:3s;animation-duration:9s}
+    .bg-suit:nth-child(5){top:80%;left:8%;font-size:50px;animation-delay:4s;animation-duration:11s}
+    .bg-suit:nth-child(6){top:75%;right:9%;font-size:65px;animation-delay:1.5s;animation-duration:8s}
+
+    .view{display:none;flex-direction:column;height:100vh;height:100dvh;overflow:hidden;position:relative;z-index:1}
+    .view.active{display:flex}
+
+    .gold-text{
+      background:linear-gradient(90deg,#7D5A00,#B8860B,#FFD700,#FFF8DC,#FFD700,#B8860B,#7D5A00);
+      background-size:300% auto;
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+      animation:goldShimmer 4s linear infinite;
     }
 
-    /* ── Reset ───────────────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    html, body { height: 100%; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; overscroll-behavior: none; }
-    button { font-family: inherit; cursor: pointer; }
-    input  { font-family: inherit; }
-
-    /* ── Pool background ─────────────────────────────────────────── */
-    body {
-      color: #fff;
-      background: linear-gradient(135deg, #051020 0%, #082040 20%, #0A2E60 45%, #0C3878 60%, #082040 80%, #051020 100%);
-      background-size: 400% 400%;
-      animation: poolWave 12s ease infinite;
-      position: relative;
-      overflow: hidden;
+    /* ── TOOLBAR ── */
+    .toolbar{
+      background:linear-gradient(135deg,rgba(4,12,28,.97) 0%,rgba(8,30,65,.97) 100%);
+      backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(255,215,0,.35);
+      min-height:72px;flex-shrink:0;
+      display:flex;align-items:center;
+      position:relative;z-index:20;
+      box-shadow:0 2px 24px rgba(255,215,0,.12),0 4px 16px rgba(0,0,0,.6);
     }
+    .toolbar-center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:2px 0}
+    .toolbar-title{font-size:19px;font-weight:900;letter-spacing:.5px;text-align:center}
+    .toolbar-sub{font-size:11px;color:rgba(0,210,255,.8);margin-top:2px;text-align:center;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .btn-icon{background:none;border:none;color:#FFD700;font-size:22px;padding:10px;min-width:48px;min-height:48px;display:flex;align-items:center;justify-content:center;border-radius:50%;flex-shrink:0}
+    .btn-icon:active{background:rgba(255,215,0,.15)}
+    .btn-invisible{visibility:hidden;min-width:48px;flex-shrink:0}
 
-    /* Pool tile grid */
-    body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background-image:
-        linear-gradient(rgba(0,210,255,.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,210,255,.06) 1px, transparent 1px);
-      background-size: 38px 38px;
-      pointer-events: none;
-      z-index: 0;
-    }
+    /* ── HERO BANNER ── */
+    .hero-banner{flex-shrink:0;overflow:hidden;background:linear-gradient(180deg,rgba(4,10,24,.6) 0%,rgba(4,10,24,.2) 100%);border-bottom:1px solid rgba(255,215,0,.2)}
+    .hero-banner svg{display:block;width:100%;max-height:210px}
+    /* Waterfall stream animations */
+    .wf1{animation:waterFall 1.4s linear infinite}
+    .wf2{animation:waterFall 1.1s linear infinite .35s}
+    .wf3{animation:waterFall 1.7s linear infinite .1s}
+    .wf4{animation:waterFall 1.25s linear infinite .55s}
+    .wf5{animation:waterFall 1.9s linear infinite .2s}
+    .wf6{animation:waterFall 1.5s linear infinite .7s}
+    .bubble1{animation:bubbleRise 2.2s ease-in-out infinite}
+    .bubble2{animation:bubbleRise 2.8s ease-in-out infinite .9s}
+    .bubble3{animation:bubbleRise 2s ease-in-out infinite .4s}
+    .allin-glow{animation:allInPulse 2s ease-in-out infinite}
 
-    /* Water caustics shimmer */
-    body::after {
-      content: '';
-      position: fixed; inset: 0;
-      background:
-        radial-gradient(ellipse at 25% 35%, rgba(0,180,255,.12) 0%, transparent 55%),
-        radial-gradient(ellipse at 75% 65%, rgba(0,220,255,.09) 0%, transparent 55%),
-        radial-gradient(ellipse at 50% 80%, rgba(0,150,220,.07) 0%, transparent 40%);
-      pointer-events: none;
-      z-index: 0;
-      animation: waterRipple 8s linear infinite alternate;
-    }
+    /* ── SESSIONS LIST ── */
+    .scrollable{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 0 95px}
+    .session-card{background:linear-gradient(135deg,rgba(6,20,50,.88) 0%,rgba(10,44,100,.88) 100%);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,215,0,.22);border-radius:14px;margin:6px 10px;padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.05)}
+    .session-card:active{border-color:rgba(255,215,0,.6);opacity:.85}
+    .session-info{flex:1;min-width:0}
+    .session-name{font-size:16px;font-weight:700;color:#fff}
+    .session-meta{font-size:12px;color:rgba(0,210,255,.8);margin-top:3px}
+    .btn-del{background:none;border:1.5px solid #E74C3C;border-radius:8px;color:#E74C3C;padding:6px 12px;font-size:12px;flex-shrink:0}
+    .btn-del:active{background:rgba(231,76,60,.15)}
 
-    /* Floating suit watermarks */
-    .bg-suits {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
-    }
-    .bg-suit {
-      position: absolute;
-      font-size: 80px;
-      color: rgba(255,215,0,1);
-      animation: suitFloat 7s ease-in-out infinite;
-    }
-    .bg-suit:nth-child(1) { top: 5%;  left: 5%;  font-size: 60px;  animation-delay: 0s;   animation-duration: 8s;  }
-    .bg-suit:nth-child(2) { top: 15%; right: 6%; font-size: 90px;  animation-delay: 2s;   animation-duration: 10s; }
-    .bg-suit:nth-child(3) { top: 45%; left: 2%;  font-size: 55px;  animation-delay: 1s;   animation-duration: 7s;  }
-    .bg-suit:nth-child(4) { top: 60%; right: 3%; font-size: 70px;  animation-delay: 3s;   animation-duration: 9s;  }
-    .bg-suit:nth-child(5) { top: 80%; left: 8%;  font-size: 50px;  animation-delay: 4s;   animation-duration: 11s; }
-    .bg-suit:nth-child(6) { top: 75%; right: 9%; font-size: 65px;  animation-delay: 1.5s; animation-duration: 8s;  }
+    .empty-state{text-align:center;color:rgba(0,210,255,.65);padding:40px 24px;font-size:16px;line-height:1.7;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center}
 
-    /* ── Views ───────────────────────────────────────────────────── */
-    .view { display: none; flex-direction: column; height: 100vh; height: 100dvh; overflow: hidden; position: relative; z-index: 1; }
-    .view.active { display: flex; }
+    /* ── FAB ── */
+    .fab{position:absolute;bottom:86px;right:16px;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#9A6E00,#FFD700,#FFC200,#FFD700);border:none;color:#071628;font-size:34px;line-height:1;font-weight:300;z-index:10;display:flex;align-items:center;justify-content:center;animation:fabGlow 2s ease-in-out infinite}
+    .fab:active{transform:scale(.94)}
+    .fab::before{content:'';position:absolute;inset:-5px;border-radius:50%;border:2px solid rgba(255,215,0,.55);animation:fabRipple 2s ease-out infinite}
 
-    /* ── Gold shimmer text ───────────────────────────────────────── */
-    .gold-text {
-      background: linear-gradient(90deg, #7D5A00, #B8860B, #FFD700, #FFF8DC, #FFD700, #B8860B, #7D5A00);
-      background-size: 300% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: goldShimmer 4s linear infinite;
-    }
+    /* ── SESSION DETAIL ── */
+    .total-pot-bar{background:linear-gradient(90deg,rgba(4,12,28,.9) 0%,rgba(0,80,160,.3) 50%,rgba(4,12,28,.9) 100%);padding:10px 16px;font-size:15px;font-weight:800;color:#00DFFF;flex-shrink:0;border-bottom:1px solid rgba(0,210,255,.18);text-shadow:0 0 14px rgba(0,210,255,.6);letter-spacing:.4px}
+    .player-list{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:4px 0 95px}
+    .player-card{background:linear-gradient(135deg,rgba(4,14,40,.92) 0%,rgba(8,34,80,.92) 100%);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid rgba(255,215,0,.18);border-radius:12px;margin:5px 8px;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.03)}
+    .player-header{display:flex;align-items:center;padding:13px 14px;min-height:56px;cursor:pointer;gap:8px}
+    .player-header:active{background:rgba(255,215,0,.05)}
+    .player-name{flex:1;font-size:15px;font-weight:700;color:#fff;word-break:break-word}
+    .player-badge{font-size:14px;font-weight:800;flex-shrink:0}
+    .chevron{color:#FFD700;font-size:11px;flex-shrink:0;margin-left:4px}
+    .player-expanded{padding:0 14px 13px}
+    .divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,215,0,.4),transparent);margin:0 0 10px}
+    .details-row{display:flex;align-items:center;gap:8px}
+    .breakdown{flex:1;font-size:12px;color:rgba(0,210,255,.8)}
+    .player-total{font-size:15px;font-weight:800;color:#FFD700;flex-shrink:0;text-shadow:0 0 10px rgba(255,215,0,.4)}
+    .btn-round{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,rgba(160,110,0,.2),rgba(255,215,0,.1));border:1.5px solid #FFD700;color:#FFD700;font-size:22px;line-height:1;flex-shrink:0;display:flex;align-items:center;justify-content:center;box-shadow:0 0 10px rgba(255,215,0,.2)}
+    .btn-round:active{background:rgba(255,215,0,.2)}
+    .net-label{font-size:13px;font-weight:800;margin:6px 0 0}
+    .actions-row{display:flex;gap:10px;margin-top:10px}
+    .btn-outlined{flex:1;background:none;border:1.5px solid;border-radius:8px;padding:8px 10px;font-size:13px;font-weight:700}
+    .btn-outlined.green{border-color:#2ECC71;color:#2ECC71;box-shadow:0 0 10px rgba(46,204,113,.15)}
+    .btn-outlined.green:active{background:rgba(46,204,113,.15)}
+    .btn-outlined.red{border-color:#E74C3C;color:#E74C3C}
+    .btn-outlined.red:active{background:rgba(231,76,60,.15)}
 
-    /* ── Toolbar ─────────────────────────────────────────────────── */
-    .toolbar {
-      background: linear-gradient(135deg, rgba(4,12,28,.97) 0%, rgba(8,30,65,.97) 100%);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(255,215,0,.35);
-      padding: 0 8px;
-      display: flex;
-      align-items: center;
-      min-height: 62px;
-      flex-shrink: 0;
-      position: relative;
-      z-index: 20;
-      box-shadow: 0 2px 24px rgba(255,215,0,.12), 0 4px 16px rgba(0,0,0,.6);
-      gap: 6px;
-    }
+    /* ── SUMMARY BAR ── */
+    .summary-bar{background:linear-gradient(90deg,rgba(4,12,28,.97) 0%,rgba(0,60,130,.45) 50%,rgba(4,12,28,.97) 100%);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:flex;gap:32px;padding:13px 16px;flex-shrink:0;border-top:1px solid rgba(255,215,0,.3);box-shadow:0 -2px 24px rgba(255,215,0,.08)}
+    .stat-label{font-size:10px;color:rgba(0,210,255,.7);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:2px}
+    .stat-value{font-size:22px;font-weight:800}
+    .stat-value.white{color:#fff}
 
-    .toolbar-title {
-      flex: 1;
-      font-size: 17px;
-      font-weight: 900;
-      padding: 0 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      letter-spacing: .5px;
-    }
+    /* ── MENU ── */
+    .menu-popup{position:absolute;top:70px;right:4px;background:linear-gradient(135deg,#06101E,#0A2440);border:1px solid rgba(255,215,0,.35);border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,.7),0 0 24px rgba(255,215,0,.08);z-index:30;display:none;min-width:170px;overflow:hidden}
+    .menu-popup.open{display:block}
+    .menu-item{padding:14px 18px;font-size:15px;color:#fff;cursor:pointer}
+    .menu-item:active{background:rgba(255,215,0,.1)}
 
-    .btn-icon {
-      background: none; border: none;
-      color: #FFD700;
-      font-size: 22px;
-      padding: 10px;
-      min-width: 44px; min-height: 44px;
-      display: flex; align-items: center; justify-content: center;
-      border-radius: 50%;
-    }
-    .btn-icon:active { background: rgba(255,215,0,.15); }
-
-    /* ── Ace playing cards ───────────────────────────────────────── */
-    .ace-card {
-      width: 34px; height: 46px;
-      background: linear-gradient(135deg, #fff 0%, #f0f0f0 100%);
-      border-radius: 5px;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      line-height: 1.1;
-      flex-shrink: 0;
-      box-shadow: 0 3px 12px rgba(0,0,0,.5), 0 0 8px rgba(255,215,0,.3);
-    }
-    .ace-card.spades { color: #111; animation: floatCard  3s ease-in-out infinite; }
-    .ace-card.hearts { color: #CC0000; animation: floatCardR 3s ease-in-out infinite; animation-delay: 1s; }
-    .ace-lbl  { font-size: 12px; font-weight: 900; }
-    .ace-suit { font-size: 18px; }
-
-    /* ── Session list ────────────────────────────────────────────── */
-    .scrollable { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 8px 0 95px; }
-
-    .session-card {
-      background: linear-gradient(135deg, rgba(6,20,50,.88) 0%, rgba(10,44,100,.88) 100%);
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,215,0,.22);
-      border-radius: 14px;
-      margin: 6px 10px;
-      padding: 14px;
-      display: flex; align-items: center; gap: 10px;
-      cursor: pointer;
-      box-shadow: 0 4px 18px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.05);
-    }
-    .session-card:active { border-color: rgba(255,215,0,.6); opacity: .85; }
-
-    .session-info { flex: 1; min-width: 0; }
-    .session-name { font-size: 16px; font-weight: 700; color: #fff; }
-    .session-meta { font-size: 12px; color: rgba(0,210,255,.8); margin-top: 3px; }
-
-    .btn-del {
-      background: none; border: 1.5px solid #E74C3C;
-      border-radius: 8px; color: #E74C3C;
-      padding: 6px 12px; font-size: 12px; flex-shrink: 0;
-    }
-    .btn-del:active { background: rgba(231,76,60,.15); }
-
-    /* ── Empty state ─────────────────────────────────────────────── */
-    .empty-state {
-      text-align: center; color: rgba(0,210,255,.65);
-      padding: 60px 24px; font-size: 16px; line-height: 1.7;
-      flex: 1; display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-    }
-    .empty-ace { font-size: 64px; margin-bottom: 16px; opacity: .4; }
-
-    /* ── FAB ─────────────────────────────────────────────────────── */
-    .fab {
-      position: absolute; bottom: 86px; right: 16px;
-      width: 60px; height: 60px; border-radius: 50%;
-      background: linear-gradient(135deg, #9A6E00, #FFD700, #FFC200, #FFD700);
-      border: none; color: #071628;
-      font-size: 34px; line-height: 1; font-weight: 300;
-      z-index: 10;
-      display: flex; align-items: center; justify-content: center;
-      animation: fabGlow 2s ease-in-out infinite;
-    }
-    .fab:active { transform: scale(.94); }
-    .fab::before {
-      content: '';
-      position: absolute; inset: -5px;
-      border-radius: 50%;
-      border: 2px solid rgba(255,215,0,.55);
-      animation: fabRipple 2s ease-out infinite;
-    }
-
-    /* ── Total pot ───────────────────────────────────────────────── */
-    .total-pot-bar {
-      background: linear-gradient(90deg, rgba(4,12,28,.9) 0%, rgba(0,80,160,.3) 50%, rgba(4,12,28,.9) 100%);
-      padding: 10px 16px;
-      font-size: 15px; font-weight: 800;
-      color: #00DFFF;
-      flex-shrink: 0;
-      border-bottom: 1px solid rgba(0,210,255,.18);
-      text-shadow: 0 0 14px rgba(0,210,255,.6);
-      letter-spacing: .4px;
-    }
-
-    /* ── Player list ─────────────────────────────────────────────── */
-    .player-list { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 4px 0 95px; }
-
-    /* ── Player card ─────────────────────────────────────────────── */
-    .player-card {
-      background: linear-gradient(135deg, rgba(4,14,40,.92) 0%, rgba(8,34,80,.92) 100%);
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,215,0,.18);
-      border-radius: 12px;
-      margin: 5px 8px;
-      overflow: hidden;
-      box-shadow: 0 4px 18px rgba(0,0,0,.45), inset 0 1px 0 rgba(255,255,255,.03);
-    }
-
-    .player-header {
-      display: flex; align-items: center;
-      padding: 13px 14px; min-height: 56px;
-      cursor: pointer; gap: 8px;
-    }
-    .player-header:active { background: rgba(255,215,0,.05); }
-
-    .player-name  { flex: 1; font-size: 15px; font-weight: 700; color: #fff; word-break: break-word; }
-    .player-badge { font-size: 14px; font-weight: 800; flex-shrink: 0; }
-    .chevron      { color: #FFD700; font-size: 11px; flex-shrink: 0; margin-left: 4px; }
-
-    /* ── Expanded ────────────────────────────────────────────────── */
-    .player-expanded { padding: 0 14px 13px; }
-    .divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,215,0,.4), transparent); margin: 0 0 10px; }
-    .details-row { display: flex; align-items: center; gap: 8px; }
-    .breakdown    { flex: 1; font-size: 12px; color: rgba(0,210,255,.8); }
-    .player-total { font-size: 15px; font-weight: 800; color: #FFD700; flex-shrink: 0; text-shadow: 0 0 10px rgba(255,215,0,.4); }
-
-    .btn-round {
-      width: 38px; height: 38px; border-radius: 50%;
-      background: linear-gradient(135deg, rgba(160,110,0,.2), rgba(255,215,0,.1));
-      border: 1.5px solid #FFD700; color: #FFD700;
-      font-size: 22px; line-height: 1; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 0 10px rgba(255,215,0,.2);
-    }
-    .btn-round:active { background: rgba(255,215,0,.2); }
-
-    .net-label   { font-size: 13px; font-weight: 800; margin: 6px 0 0; }
-    .actions-row { display: flex; gap: 10px; margin-top: 10px; }
-
-    .btn-outlined { flex: 1; background: none; border: 1.5px solid; border-radius: 8px; padding: 8px 10px; font-size: 13px; font-weight: 700; }
-    .btn-outlined.green { border-color: #2ECC71; color: #2ECC71; box-shadow: 0 0 10px rgba(46,204,113,.15); }
-    .btn-outlined.green:active { background: rgba(46,204,113,.15); }
-    .btn-outlined.red   { border-color: #E74C3C; color: #E74C3C; }
-    .btn-outlined.red:active   { background: rgba(231,76,60,.15); }
-
-    /* ── Summary bar ─────────────────────────────────────────────── */
-    .summary-bar {
-      background: linear-gradient(90deg, rgba(4,12,28,.97) 0%, rgba(0,60,130,.45) 50%, rgba(4,12,28,.97) 100%);
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      display: flex; gap: 32px;
-      padding: 13px 16px;
-      flex-shrink: 0;
-      border-top: 1px solid rgba(255,215,0,.3);
-      box-shadow: 0 -2px 24px rgba(255,215,0,.08);
-    }
-    .stat-label { font-size: 10px; color: rgba(0,210,255,.7); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 2px; }
-    .stat-value { font-size: 22px; font-weight: 800; }
-    .stat-value.white { color: #fff; }
-
-    /* ── Dropdown menu ───────────────────────────────────────────── */
-    .menu-popup {
-      position: absolute; top: 60px; right: 4px;
-      background: linear-gradient(135deg, #06101E, #0A2440);
-      border: 1px solid rgba(255,215,0,.35);
-      border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(0,0,0,.7), 0 0 24px rgba(255,215,0,.08);
-      z-index: 30; display: none; min-width: 170px; overflow: hidden;
-    }
-    .menu-popup.open { display: block; }
-    .menu-item { padding: 14px 18px; font-size: 15px; color: #fff; cursor: pointer; }
-    .menu-item:active { background: rgba(255,215,0,.1); }
-
-    /* ── Overlay ─────────────────────────────────────────────────── */
-    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.65); z-index: 40; display: none; backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); }
-    .overlay.active { display: block; }
-    .overlay.clear  { background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
-
-    /* ── Dialog ──────────────────────────────────────────────────── */
-    .dialog {
-      position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%);
-      background: linear-gradient(135deg, #06101E 0%, #0A2440 100%);
-      border: 1px solid rgba(255,215,0,.45);
-      border-radius: 18px;
-      padding: 22px 20px 16px;
-      width: calc(100% - 40px); max-width: 360px;
-      z-index: 50; display: none;
-      box-shadow: 0 20px 60px rgba(0,0,0,.8), 0 0 40px rgba(255,215,0,.1);
-    }
-    .dialog.active { display: block; }
-    .dialog-title { font-size: 18px; font-weight: 900; margin-bottom: 14px; }
-    .dialog-info  { font-size: 14px; color: rgba(0,210,255,.8); margin-bottom: 10px; }
-    .dialog input {
-      width: 100%;
-      background: rgba(0,0,0,.35);
-      border: 1.5px solid rgba(255,215,0,.4);
-      border-radius: 10px;
-      padding: 11px 12px; color: #fff; font-size: 16px; margin-bottom: 10px;
-      outline: none; appearance: none; -webkit-appearance: none;
-    }
-    .dialog input:focus { border-color: #FFD700; box-shadow: 0 0 12px rgba(255,215,0,.2); }
-    .dialog input::placeholder { color: rgba(255,255,255,.3); }
-    .dialog-actions { display: flex; justify-content: flex-end; gap: 4px; margin-top: 8px; }
-    .btn-dialog { background: none; border: none; padding: 10px 16px; font-size: 15px; border-radius: 8px; }
-    .btn-dialog.cancel  { color: rgba(255,255,255,.4); }
-    .btn-dialog.cancel:active  { background: rgba(255,255,255,.08); }
-    .btn-dialog.confirm { color: #FFD700; font-weight: 800; }
-    .btn-dialog.confirm:active { background: rgba(255,215,0,.12); }
+    /* ── OVERLAY + DIALOG ── */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:40;display:none;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
+    .overlay.active{display:block}
+    .overlay.clear{background:transparent;backdrop-filter:none;-webkit-backdrop-filter:none}
+    .dialog{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:linear-gradient(135deg,#06101E 0%,#0A2440 100%);border:1px solid rgba(255,215,0,.45);border-radius:18px;padding:22px 20px 16px;width:calc(100% - 40px);max-width:360px;z-index:50;display:none;box-shadow:0 20px 60px rgba(0,0,0,.8),0 0 40px rgba(255,215,0,.1)}
+    .dialog.active{display:block}
+    .dialog-title{font-size:18px;font-weight:900;margin-bottom:14px}
+    .dialog-info{font-size:14px;color:rgba(0,210,255,.8);margin-bottom:10px}
+    .dialog input{width:100%;background:rgba(0,0,0,.35);border:1.5px solid rgba(255,215,0,.4);border-radius:10px;padding:11px 12px;color:#fff;font-size:16px;margin-bottom:10px;outline:none;appearance:none;-webkit-appearance:none}
+    .dialog input:focus{border-color:#FFD700;box-shadow:0 0 12px rgba(255,215,0,.2)}
+    .dialog input::placeholder{color:rgba(255,255,255,.3)}
+    .dialog-actions{display:flex;justify-content:flex-end;gap:4px;margin-top:8px}
+    .btn-dialog{background:none;border:none;padding:10px 16px;font-size:15px;border-radius:8px}
+    .btn-dialog.cancel{color:rgba(255,255,255,.4)}
+    .btn-dialog.cancel:active{background:rgba(255,255,255,.08)}
+    .btn-dialog.confirm{color:#FFD700;font-weight:800}
+    .btn-dialog.confirm:active{background:rgba(255,215,0,.12)}
   </style>
 </head>
 <body>
 
-<!-- Floating background suit watermarks -->
 <div class="bg-suits" aria-hidden="true">
-  <span class="bg-suit">♠</span>
-  <span class="bg-suit">♥</span>
-  <span class="bg-suit">♦</span>
-  <span class="bg-suit">♣</span>
-  <span class="bg-suit">♠</span>
-  <span class="bg-suit">♥</span>
+  <span class="bg-suit">♠</span><span class="bg-suit">♥</span>
+  <span class="bg-suit">♦</span><span class="bg-suit">♣</span>
+  <span class="bg-suit">♠</span><span class="bg-suit">♥</span>
 </div>
 
-<!-- ══════════════════ SESSIONS VIEW ══════════════════ -->
+<!-- ══ SESSIONS VIEW ══ -->
 <div id="view-sessions" class="view active">
+
   <div class="toolbar">
-    <div class="ace-card spades"><span class="ace-lbl">A</span><span class="ace-suit">♠</span></div>
-    <span class="toolbar-title gold-text">BrettonWood Poker</span>
-    <div class="ace-card hearts"><span class="ace-lbl">A</span><span class="ace-suit">♥</span></div>
+    <div class="btn-invisible"></div>
+    <div class="toolbar-center">
+      <span class="toolbar-title gold-text">BrettonWood Poker</span>
+    </div>
+    <div class="btn-invisible"></div>
   </div>
+
+  <!-- ══ HERO BANNER ══ -->
+  <div class="hero-banner">
+    <svg viewBox="0 0 360 210" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+      <defs>
+        <linearGradient id="wg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#00E5FF" stop-opacity=".9"/>
+          <stop offset="65%" stop-color="#0088CC" stop-opacity=".65"/>
+          <stop offset="100%" stop-color="#004488" stop-opacity=".3"/>
+        </linearGradient>
+        <radialGradient id="skinG" cx="45%" cy="38%">
+          <stop offset="0%" stop-color="#F5C5A3"/>
+          <stop offset="100%" stop-color="#D4956E"/>
+        </radialGradient>
+        <radialGradient id="chipAu" cx="38%" cy="32%">
+          <stop offset="0%" stop-color="#FFF9C4"/>
+          <stop offset="60%" stop-color="#FFD700"/>
+          <stop offset="100%" stop-color="#9A6800"/>
+        </radialGradient>
+        <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="3" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="1.5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <clipPath id="wfClip"><rect x="0" y="0" width="82" height="210"/></clipPath>
+        <clipPath id="heroClip"><rect x="0" y="0" width="360" height="210"/></clipPath>
+      </defs>
+
+      <!-- Dark pool background -->
+      <rect width="360" height="210" fill="#030C1C" clip-path="url(#heroClip)"/>
+      <!-- Subtle pool light rays -->
+      <ellipse cx="180" cy="210" rx="200" ry="60" fill="rgba(0,120,255,.07)"/>
+      <ellipse cx="80" cy="200" rx="80" ry="30" fill="rgba(0,200,255,.06)"/>
+
+      <!-- ── WATERFALL (left) ── -->
+      <g clip-path="url(#wfClip)">
+        <!-- Rocky ledge top-left -->
+        <path d="M0,0 L45,0 L50,12 L38,22 L20,18 L0,22 Z" fill="#152A1E" opacity=".85"/>
+        <path d="M0,0 L28,0 L32,10 L18,16 L0,16 Z" fill="#1A3A24" opacity=".7"/>
+
+        <!-- Waterfall streams — CSS animated -->
+        <rect class="wf1" x="14" y="-220" width="11" height="320" fill="url(#wg)" rx="5" opacity=".85"/>
+        <rect class="wf2" x="29" y="-160" width="7"  height="320" fill="url(#wg)" rx="3" opacity=".6"/>
+        <rect class="wf3" x="40" y="-190" width="5"  height="320" fill="url(#wg)" rx="2" opacity=".5"/>
+        <rect class="wf4" x="50" y="-130" width="8"  height="320" fill="url(#wg)" rx="3" opacity=".65"/>
+        <rect class="wf5" x="61" y="-210" width="5"  height="320" fill="url(#wg)" rx="2" opacity=".45"/>
+        <rect class="wf6" x="70" y="-170" width="4"  height="320" fill="url(#wg)" rx="2" opacity=".35"/>
+
+        <!-- Splash pool at bottom -->
+        <ellipse cx="42" cy="205" rx="40" ry="10" fill="rgba(0,200,255,.2)"/>
+        <ellipse cx="42" cy="203" rx="26" ry="6"  fill="rgba(0,230,255,.25)"/>
+        <ellipse cx="42" cy="201" rx="14" ry="3"  fill="rgba(200,245,255,.2)"/>
+
+        <!-- Rising bubbles -->
+        <circle class="bubble1" cx="22" cy="185" r="3.5" fill="rgba(0,230,255,.4)" stroke="rgba(150,240,255,.6)" stroke-width=".6"/>
+        <circle class="bubble2" cx="48" cy="170" r="2.5" fill="rgba(0,220,255,.35)" stroke="rgba(150,240,255,.5)" stroke-width=".5"/>
+        <circle class="bubble3" cx="60" cy="180" r="2"   fill="rgba(0,210,255,.3)"  stroke="rgba(150,240,255,.4)" stroke-width=".5"/>
+
+        <!-- Mist -->
+        <ellipse cx="40" cy="208" rx="55" ry="12" fill="rgba(200,240,255,.07)"/>
+      </g>
+
+      <!-- ── CHIP STACK (center-left: ~x90-150) ── -->
+      <!-- Shadow under pile -->
+      <ellipse cx="116" cy="202" rx="42" ry="9" fill="rgba(0,0,0,.5)"/>
+
+      <!-- Chip 1 – Red (bottom) -->
+      <ellipse cx="116" cy="190" rx="37" ry="10" fill="#6B0000"/>
+      <ellipse cx="116" cy="185" rx="37" ry="10" fill="#CC0000"/>
+      <rect x="85"  y="178" width="13" height="14" fill="#fff" opacity=".3" rx="2"/>
+      <rect x="118" y="178" width="13" height="14" fill="#fff" opacity=".3" rx="2"/>
+      <circle cx="116" cy="185" r="23" fill="none" stroke="#fff" stroke-width=".6" opacity=".2"/>
+      <text x="116" y="188" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold" opacity=".55">♥</text>
+
+      <!-- Chip 2 – Blue -->
+      <ellipse cx="116" cy="171" rx="37" ry="10" fill="#00007A"/>
+      <ellipse cx="116" cy="166" rx="37" ry="10" fill="#0000BB"/>
+      <rect x="85"  y="159" width="13" height="14" fill="#fff" opacity=".3" rx="2"/>
+      <rect x="118" y="159" width="13" height="14" fill="#fff" opacity=".3" rx="2"/>
+      <text x="116" y="169" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold" opacity=".55">♠</text>
+
+      <!-- Chip 3 – Black/gold -->
+      <ellipse cx="116" cy="152" rx="37" ry="10" fill="#0D0D0D"/>
+      <ellipse cx="116" cy="147" rx="37" ry="10" fill="#1C1C1C"/>
+      <rect x="85"  y="140" width="13" height="14" fill="#FFD700" opacity=".45" rx="2"/>
+      <rect x="118" y="140" width="13" height="14" fill="#FFD700" opacity=".45" rx="2"/>
+      <text x="116" y="150" text-anchor="middle" fill="#FFD700" font-size="9" font-weight="bold" opacity=".7">♦</text>
+
+      <!-- Chip 4 – Green -->
+      <ellipse cx="116" cy="133" rx="37" ry="10" fill="#003800"/>
+      <ellipse cx="116" cy="128" rx="37" ry="10" fill="#005500"/>
+      <rect x="85"  y="121" width="13" height="14" fill="#fff" opacity=".3" rx="2"/>
+      <rect x="118" y="121" width="13" height="14" fill="#fff" opacity=".3" rx="2"/>
+      <text x="116" y="131" text-anchor="middle" fill="#fff" font-size="9" font-weight="bold" opacity=".55">♣</text>
+
+      <!-- Chip 5 – Gold (top) -->
+      <ellipse cx="116" cy="114" rx="37" ry="10" fill="#7A5500"/>
+      <ellipse cx="116" cy="109" rx="37" ry="10" fill="url(#chipAu)"/>
+      <rect x="85"  y="102" width="13" height="14" fill="#fff" opacity=".2" rx="2"/>
+      <rect x="118" y="102" width="13" height="14" fill="#fff" opacity=".2" rx="2"/>
+      <circle cx="116" cy="109" r="23" fill="none" stroke="#FFD700" stroke-width="1" opacity=".45"/>
+      <text x="116" y="112" text-anchor="middle" fill="#3A2800" font-size="9" font-weight="bold">$</text>
+
+      <!-- Scattered side chips -->
+      <ellipse cx="80"  cy="164" rx="22" ry="6" fill="#007700" transform="rotate(-22,80,164)"/>
+      <ellipse cx="80"  cy="161" rx="22" ry="6" fill="#009900" transform="rotate(-22,80,161)"/>
+      <ellipse cx="152" cy="157" rx="22" ry="6" fill="#AA0000" transform="rotate(18,152,157)"/>
+      <ellipse cx="152" cy="154" rx="22" ry="6" fill="#DD0000" transform="rotate(18,152,154)"/>
+
+      <!-- ── "ALL IN" + ACE CARD (center: ~x155-235) ── -->
+      <!-- Glow halo -->
+      <ellipse cx="193" cy="78" rx="50" ry="20" fill="rgba(255,150,0,.08)"/>
+
+      <text class="allin-glow" x="193" y="82" text-anchor="middle"
+            font-family="Arial Black,Impact,sans-serif" font-size="30" font-weight="900"
+            fill="#FFD700" letter-spacing="5">ALL IN</text>
+      <!-- Red outline -->
+      <text x="193" y="82" text-anchor="middle"
+            font-family="Arial Black,Impact,sans-serif" font-size="30" font-weight="900"
+            fill="none" stroke="#FF4400" stroke-width=".8" letter-spacing="5" opacity=".6">ALL IN</text>
+
+      <!-- Ace of Spades card -->
+      <g transform="translate(169,96)">
+        <rect width="50" height="68" rx="5" fill="white" stroke="#FFD700" stroke-width="1.2"/>
+        <!-- Corners -->
+        <text x="5" y="15" font-size="12" font-weight="bold" fill="#111" font-family="serif">A</text>
+        <text x="5" y="26" font-size="11" fill="#111" font-family="serif">♠</text>
+        <text x="45" y="65" font-size="12" font-weight="bold" fill="#111" font-family="serif" transform="rotate(180,25,58)">A</text>
+        <text x="38" y="56" font-size="11" fill="#111" font-family="serif" transform="rotate(180,38,56)">♠</text>
+        <!-- Big center spade -->
+        <text x="25" y="58" text-anchor="middle" font-size="34" fill="#111" font-family="serif">♠</text>
+      </g>
+
+      <!-- ── LADY FACE (right: ~x240-360) ── -->
+
+      <!-- Hair mass (behind face) -->
+      <ellipse cx="302" cy="88" rx="60" ry="78" fill="#080308"/>
+      <!-- Hair flow left -->
+      <path d="M248,25 Q235,75 240,185 Q255,198 268,192" fill="#080308" opacity=".95"/>
+      <!-- Hair flow right -->
+      <path d="M356,25 Q369,75 364,185 Q349,198 336,192" fill="#080308" opacity=".95"/>
+      <!-- Hair highlight streaks -->
+      <path d="M270,18 Q278,35 276,65" stroke="#1E0C10" stroke-width="7" fill="none" stroke-linecap="round" opacity=".5"/>
+      <path d="M280,14 Q290,32 288,62" stroke="#2A0E14" stroke-width="4" fill="none" stroke-linecap="round" opacity=".35"/>
+
+      <!-- FACE -->
+      <ellipse cx="302" cy="97" rx="46" ry="58" fill="url(#skinG)"/>
+
+      <!-- Purple eye shadow -->
+      <ellipse cx="286" cy="75" rx="18" ry="11" fill="#4A0D60" opacity=".5"/>
+      <ellipse cx="318" cy="75" rx="18" ry="11" fill="#4A0D60" opacity=".5"/>
+      <!-- Lighter inner shadow highlight -->
+      <ellipse cx="286" cy="78" rx="12" ry="7"  fill="#7B2FBE" opacity=".2"/>
+      <ellipse cx="318" cy="78" rx="12" ry="7"  fill="#7B2FBE" opacity=".2"/>
+
+      <!-- LEFT EYE — whites -->
+      <ellipse cx="286" cy="78" rx="15" ry="8.5" fill="white"/>
+      <!-- Iris (deep green) -->
+      <circle cx="286" cy="78" r="6.5" fill="#1B6E3F"/>
+      <!-- Limbal ring -->
+      <circle cx="286" cy="78" r="6.5" fill="none" stroke="#0D3D22" stroke-width="1.2"/>
+      <!-- Pupil -->
+      <circle cx="286" cy="78" r="3.8" fill="#050505"/>
+      <!-- Catchlight -->
+      <ellipse cx="288.5" cy="75.5" rx="2.2" ry="1.6" fill="white" opacity=".95"/>
+      <ellipse cx="283.5" cy="80"   rx="1"   ry=".7"  fill="white" opacity=".4"/>
+
+      <!-- LEFT EYE LASHES (upper) -->
+      <path d="M271,71 C269,65 268,61 270,57" stroke="#0A0A0A" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <path d="M276,69 C275,63 275,59 277,55" stroke="#0A0A0A" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <path d="M282,67 C282,61 283,57 286,54" stroke="#0A0A0A" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <path d="M288,67 C289,62 291,58 295,56" stroke="#0A0A0A" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <path d="M293,69 C295,64 298,62 302,61" stroke="#0A0A0A" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <!-- Eyeliner -->
+      <path d="M271,78 Q280,85 301,79" stroke="#0A0A0A" stroke-width="1.2" fill="none"/>
+
+      <!-- RIGHT EYE — whites -->
+      <ellipse cx="318" cy="78" rx="15" ry="8.5" fill="white"/>
+      <circle cx="318" cy="78" r="6.5" fill="#1B6E3F"/>
+      <circle cx="318" cy="78" r="6.5" fill="none" stroke="#0D3D22" stroke-width="1.2"/>
+      <circle cx="318" cy="78" r="3.8" fill="#050505"/>
+      <ellipse cx="320.5" cy="75.5" rx="2.2" ry="1.6" fill="white" opacity=".95"/>
+      <ellipse cx="315.5" cy="80"   rx="1"   ry=".7"  fill="white" opacity=".4"/>
+
+      <!-- RIGHT EYE LASHES -->
+      <path d="M304,69 C302,63 302,60 304,56" stroke="#0A0A0A" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <path d="M309,67 C308,61 309,57 312,54" stroke="#0A0A0A" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <path d="M315,67 C316,61 317,57 321,55" stroke="#0A0A0A" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <path d="M321,68 C323,63 325,60 329,58" stroke="#0A0A0A" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <path d="M326,70 C329,65 332,63 336,62" stroke="#0A0A0A" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+      <!-- Eyeliner -->
+      <path d="M303,78 Q311,85 333,79" stroke="#0A0A0A" stroke-width="1.2" fill="none"/>
+
+      <!-- EYEBROWS (sharp arched) -->
+      <path d="M270,65 Q282,57 300,61" stroke="#160808" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+      <path d="M304,61 Q322,57 335,65" stroke="#160808" stroke-width="2.8" fill="none" stroke-linecap="round"/>
+
+      <!-- NOSE (subtle) -->
+      <path d="M297,86 Q294,98 293,104 Q302,109 311,104 Q310,98 307,86"
+            stroke="#B87850" stroke-width="1" fill="none" opacity=".45"/>
+
+      <!-- LIPS -->
+      <!-- Upper lip + cupid bow -->
+      <path d="M288,122 Q295,117 302,119 Q309,117 316,122 Q310,127 302,128 Q294,127 288,122Z" fill="#C8103E"/>
+      <!-- Lower lip -->
+      <path d="M288,122 Q295,133 302,135 Q309,133 316,122 Q310,128 302,128 Q294,128 288,122Z" fill="#E01550"/>
+      <!-- Lip highlight -->
+      <ellipse cx="302" cy="125" rx="9" ry="3" fill="#FF7799" opacity=".35"/>
+      <!-- Lip line -->
+      <path d="M288,122 Q295,117 302,119 Q309,117 316,122" stroke="#8B0028" stroke-width=".7" fill="none"/>
+
+      <!-- BLUSH -->
+      <ellipse cx="270" cy="100" rx="15" ry="9" fill="#FF9999" opacity=".16"/>
+      <ellipse cx="334" cy="100" rx="15" ry="9" fill="#FF9999" opacity=".16"/>
+
+      <!-- GOLD EARRINGS (dangling) -->
+      <circle cx="256" cy="100" r="5.5" fill="#FFD700" opacity=".9" filter="url(#softGlow)"/>
+      <ellipse cx="256" cy="112" rx="4"   ry="6.5" fill="#FFD700" opacity=".85"/>
+      <circle cx="256" cy="120" r="3" fill="#FFD700" opacity=".8"/>
+      <circle cx="348" cy="100" r="5.5" fill="#FFD700" opacity=".9" filter="url(#softGlow)"/>
+      <ellipse cx="348" cy="112" rx="4"   ry="6.5" fill="#FFD700" opacity=".85"/>
+      <circle cx="348" cy="120" r="3" fill="#FFD700" opacity=".8"/>
+
+      <!-- GOLD NECKLACE -->
+      <path d="M268,155 Q302,168 336,155" stroke="#FFD700" stroke-width="1.5" fill="none" opacity=".55"/>
+      <circle cx="302" cy="163" r="4" fill="#FFD700" opacity=".6"/>
+
+      <!-- RED NAILS — left hand holding chip -->
+      <g transform="translate(258,158)">
+        <rect x="0" y="12" width="44" height="20" rx="8" fill="#E8A882"/>
+        <!-- 4 fingers with red nails -->
+        <rect x="1"  y="4"  width="8" height="13" rx="4.5" fill="#C8002E"/>
+        <rect x="11" y="1"  width="8" height="13" rx="4.5" fill="#C8002E"/>
+        <rect x="21" y="0"  width="8" height="13" rx="4.5" fill="#C8002E"/>
+        <rect x="31" y="3"  width="8" height="13" rx="4.5" fill="#C8002E"/>
+        <!-- Nail shine -->
+        <rect x="2"  y="5"  width="4" height="5"  rx="2.5" fill="#FF6688" opacity=".45"/>
+        <rect x="12" y="2"  width="4" height="5"  rx="2.5" fill="#FF6688" opacity=".45"/>
+        <rect x="22" y="1"  width="4" height="5"  rx="2.5" fill="#FF6688" opacity=".45"/>
+        <rect x="32" y="4"  width="4" height="5"  rx="2.5" fill="#FF6688" opacity=".45"/>
+      </g>
+      <!-- Gold chip held between hands -->
+      <ellipse cx="302" cy="178" rx="24" ry="7" fill="#7A5500"/>
+      <ellipse cx="302" cy="174" rx="24" ry="7" fill="url(#chipAu)"/>
+      <text x="302" y="177" text-anchor="middle" fill="#3A2800" font-size="7" font-weight="bold">$500</text>
+      <!-- Right hand (mirrored) -->
+      <g transform="translate(346,158) scale(-1,1)">
+        <rect x="0" y="12" width="44" height="20" rx="8" fill="#E8A882"/>
+        <rect x="1"  y="4"  width="8" height="13" rx="4.5" fill="#C8002E"/>
+        <rect x="11" y="1"  width="8" height="13" rx="4.5" fill="#C8002E"/>
+        <rect x="21" y="0"  width="8" height="13" rx="4.5" fill="#C8002E"/>
+        <rect x="31" y="3"  width="8" height="13" rx="4.5" fill="#C8002E"/>
+        <rect x="2"  y="5"  width="4" height="5"  rx="2.5" fill="#FF6688" opacity=".45"/>
+        <rect x="12" y="2"  width="4" height="5"  rx="2.5" fill="#FF6688" opacity=".45"/>
+        <rect x="22" y="1"  width="4" height="5"  rx="2.5" fill="#FF6688" opacity=".45"/>
+        <rect x="32" y="4"  width="4" height="5"  rx="2.5" fill="#FF6688" opacity=".45"/>
+      </g>
+
+      <!-- Pool light caustic on face -->
+      <ellipse cx="296" cy="72" rx="28" ry="9" fill="rgba(0,200,255,.04)" transform="rotate(-8,296,72)"/>
+    </svg>
+  </div>
+  <!-- END HERO -->
+
   <div id="sessions-list" class="scrollable"></div>
   <div id="sessions-empty" class="empty-state" style="display:none">
-    <div class="empty-ace">♠ A ♥</div>
     No sessions yet.<br>Tap <strong style="color:#FFD700">+</strong> to start a game.
   </div>
   <button class="fab" onclick="showNewSessionDialog()" aria-label="New session">+</button>
 </div>
 
-<!-- ══════════════════ SESSION VIEW ═══════════════════ -->
+<!-- ══ SESSION DETAIL VIEW ══ -->
 <div id="view-session" class="view">
   <div class="toolbar">
     <button class="btn-icon" onclick="showSessionsView()" aria-label="Back">&#8592;</button>
-    <span id="session-title" class="toolbar-title gold-text"></span>
+    <div class="toolbar-center">
+      <span class="toolbar-title gold-text">BrettonWood Poker</span>
+      <span id="session-subtitle" class="toolbar-sub"></span>
+    </div>
     <button class="btn-icon" id="menu-btn" onclick="toggleMenu()" aria-label="Menu">&#8942;</button>
     <div id="session-menu" class="menu-popup">
       <div class="menu-item" onclick="showRenameDialog()">✏️ Rename Session</div>
     </div>
   </div>
-  <div id="total-pot" class="total-pot-bar">Total Pot: $0.00</div>
+  <div id="total-pot" class="total-pot-bar">💧 Total Pot: $0.00</div>
   <div id="players-list" class="player-list"></div>
   <div id="players-empty" class="empty-state" style="display:none">
-    <div class="empty-ace">🃏</div>
-    No players yet.<br>Tap <strong style="color:#FFD700">+</strong> to add a player.
+    🃏 No players yet.<br>Tap <strong style="color:#FFD700">+</strong> to add a player.
   </div>
   <div class="summary-bar">
     <div>
@@ -411,368 +482,248 @@
   <button class="fab" onclick="showAddPlayerDialog()" aria-label="Add player">+</button>
 </div>
 
-<!-- ══════════════════ OVERLAY + DIALOG ═══════════════ -->
 <div id="overlay" class="overlay" onclick="handleOverlayClick()"></div>
 <div id="dialog" class="dialog" role="dialog" aria-modal="true"></div>
 
 <script>
 'use strict';
+let db={sessions:[]},currentSessionId=null,expandedIds=new Set();
+const SK='bw-poker-v1';
 
-// ── State ───────────────────────────────────────────────────────────
-let db = { sessions: [] };
-let currentSessionId = null;
-let expandedIds = new Set();
-const STORAGE_KEY = 'bw-poker-v1';
+function load(){try{const s=localStorage.getItem(SK);if(s)db=JSON.parse(s)}catch{}}
+function save(){try{localStorage.setItem(SK,JSON.stringify(db))}catch{}}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2)}
+function esc(s){const d=document.createElement('div');d.textContent=String(s);return d.innerHTML}
+function fmt(n){return'$'+Math.abs(n).toFixed(2)}
 
-// ── Persistence ─────────────────────────────────────────────────────
-function load() {
-  try { const s = localStorage.getItem(STORAGE_KEY); if (s) db = JSON.parse(s); } catch {}
+function ordinal(n){
+  if(n>=11&&n<=13)return n+'th';
+  switch(n%10){case 1:return n+'st';case 2:return n+'nd';case 3:return n+'rd';default:return n+'th'}
 }
-function save() {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(db)); } catch {}
+function defaultName(){
+  const d=new Date();
+  return d.toLocaleString('en-US',{month:'long'})+' '+ordinal(d.getDate())+' Game';
 }
-
-// ── Utilities ───────────────────────────────────────────────────────
-function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
-
-function esc(s) {
-  const d = document.createElement('div');
-  d.textContent = String(s);
-  return d.innerHTML;
+function fmtDate(ts){
+  return new Date(ts).toLocaleString('en-US',{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
 }
 
-function fmt(n) { return '$' + Math.abs(n).toFixed(2); }
-
-function ordinal(n) {
-  if (n >= 11 && n <= 13) return n + 'th';
-  switch (n % 10) { case 1: return n+'st'; case 2: return n+'nd'; case 3: return n+'rd'; default: return n+'th'; }
+function stats(p){
+  const b=p.buyins||[],a=b.filter(x=>x.type!=='CASHOUT'),c=b.filter(x=>x.type==='CASHOUT');
+  const totalAmount=a.reduce((s,x)=>s+x.amount,0);
+  const buyInCount=b.filter(x=>x.type==='BUYIN').length;
+  const rebuyCount=b.filter(x=>x.type==='REBUY').length;
+  const cashoutAmount=c.reduce((s,x)=>s+x.amount,0);
+  const hasCashedOut=cashoutAmount>0;
+  return{totalAmount,buyInCount,rebuyCount,cashoutAmount,hasCashedOut,net:cashoutAmount-totalAmount};
 }
 
-function defaultName() {
-  const d = new Date();
-  return d.toLocaleString('en-US', { month: 'long' }) + ' ' + ordinal(d.getDate()) + ' Game';
-}
-
-function fmtDate(ts) {
-  return new Date(ts).toLocaleString('en-US', { weekday:'short', month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
-}
-
-// ── Player stats ────────────────────────────────────────────────────
-function stats(player) {
-  const buyins = player.buyins || [];
-  const active  = buyins.filter(b => b.type !== 'CASHOUT');
-  const cashouts = buyins.filter(b => b.type === 'CASHOUT');
-  const totalAmount   = active.reduce((s, b) => s + b.amount, 0);
-  const buyInCount    = buyins.filter(b => b.type === 'BUYIN').length;
-  const rebuyCount    = buyins.filter(b => b.type === 'REBUY').length;
-  const cashoutAmount = cashouts.reduce((s, b) => s + b.amount, 0);
-  const hasCashedOut  = cashoutAmount > 0;
-  const net           = cashoutAmount - totalAmount;
-  return { totalAmount, buyInCount, rebuyCount, cashoutAmount, hasCashedOut, net };
-}
-
-// ── Sort players ────────────────────────────────────────────────────
-function sortedPlayers(players) {
-  return [...(players || [])].sort((a, b) => {
-    const sa = stats(a), sb = stats(b);
-    if (sa.hasCashedOut !== sb.hasCashedOut) return sa.hasCashedOut ? -1 : 1;
-    if (sa.hasCashedOut) return sb.net - sa.net;
-    return sb.totalAmount - sa.totalAmount;
+function sortedPlayers(players){
+  return[...(players||[])].sort((a,b)=>{
+    const sa=stats(a),sb=stats(b);
+    if(sa.hasCashedOut!==sb.hasCashedOut)return sa.hasCashedOut?-1:1;
+    if(sa.hasCashedOut)return sb.net-sa.net;
+    return sb.totalAmount-sa.totalAmount;
   });
 }
 
-// ── View navigation ─────────────────────────────────────────────────
-function showView(name) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.getElementById('view-' + name).classList.add('active');
+function showView(n){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.getElementById('view-'+n).classList.add('active')}
+
+function showSessionsView(){currentSessionId=null;expandedIds.clear();renderSessions();showView('sessions')}
+
+function openSession(id){
+  currentSessionId=id;expandedIds.clear();
+  const s=db.sessions.find(s=>s.id===id);
+  if(s)document.getElementById('session-subtitle').textContent=s.name;
+  renderSession();showView('session');
 }
 
-function showSessionsView() {
-  currentSessionId = null; expandedIds.clear();
-  renderSessions(); showView('sessions');
-}
-
-function openSession(id) {
-  currentSessionId = id; expandedIds.clear();
-  renderSession(); showView('session');
-}
-
-// ── Sessions list ────────────────────────────────────────────────────
-function renderSessions() {
-  const list  = document.getElementById('sessions-list');
-  const empty = document.getElementById('sessions-empty');
-  if (!db.sessions.length) {
-    list.innerHTML = ''; list.style.display = 'none'; empty.style.display = ''; return;
-  }
-  list.style.display = ''; empty.style.display = 'none';
-  list.innerHTML = db.sessions.map(s => `
+function renderSessions(){
+  const list=document.getElementById('sessions-list'),empty=document.getElementById('sessions-empty');
+  if(!db.sessions.length){list.innerHTML='';list.style.display='none';empty.style.display='';return}
+  list.style.display='';empty.style.display='none';
+  list.innerHTML=db.sessions.map(s=>`
     <div class="session-card" onclick="openSession('${s.id}')">
       <div class="session-info">
         <div class="session-name">${esc(s.name)}</div>
         <div class="session-meta">♠ ${fmtDate(s.date)}</div>
       </div>
-      <button class="btn-del" onclick="event.stopPropagation(); confirmDeleteSession('${s.id}')">Delete</button>
-    </div>
-  `).join('');
+      <button class="btn-del" onclick="event.stopPropagation();confirmDeleteSession('${s.id}')">Delete</button>
+    </div>`).join('');
 }
 
-// ── Session detail ───────────────────────────────────────────────────
-function renderSession() {
-  const session = db.sessions.find(s => s.id === currentSessionId);
-  if (!session) return;
-  document.getElementById('session-title').textContent = session.name;
+function renderSession(){
+  const s=db.sessions.find(s=>s.id===currentSessionId);if(!s)return;
+  document.getElementById('session-subtitle').textContent=s.name;
   renderPlayers();
 }
 
-function renderPlayers() {
-  const session = db.sessions.find(s => s.id === currentSessionId);
-  if (!session) return;
-  const sorted = sortedPlayers(session.players);
-  const list   = document.getElementById('players-list');
-  const empty  = document.getElementById('players-empty');
-
-  const totalIn      = sorted.reduce((s, p) => s + stats(p).totalAmount, 0);
-  const totalSettled = sorted.reduce((s, p) => s + stats(p).cashoutAmount, 0);
-  document.getElementById('total-pot').textContent    = '💧 Total Pot: $' + totalIn.toFixed(2);
-  document.getElementById('stat-buyins').textContent  = '$' + totalIn.toFixed(2);
-  document.getElementById('stat-settled').textContent = '$' + totalSettled.toFixed(2);
-
-  if (!sorted.length) { list.innerHTML = ''; list.style.display = 'none'; empty.style.display = ''; return; }
-  list.style.display = ''; empty.style.display = 'none';
-  list.innerHTML = sorted.map(p => playerCardHtml(p)).join('');
+function renderPlayers(){
+  const session=db.sessions.find(s=>s.id===currentSessionId);if(!session)return;
+  const sorted=sortedPlayers(session.players);
+  const list=document.getElementById('players-list'),empty=document.getElementById('players-empty');
+  const totalIn=sorted.reduce((s,p)=>s+stats(p).totalAmount,0);
+  const totalSettled=sorted.reduce((s,p)=>s+stats(p).cashoutAmount,0);
+  document.getElementById('total-pot').textContent='💧 Total Pot: $'+totalIn.toFixed(2);
+  document.getElementById('stat-buyins').textContent='$'+totalIn.toFixed(2);
+  document.getElementById('stat-settled').textContent='$'+totalSettled.toFixed(2);
+  if(!sorted.length){list.innerHTML='';list.style.display='none';empty.style.display='';return}
+  list.style.display='';empty.style.display='none';
+  list.innerHTML=sorted.map(p=>playerCardHtml(p)).join('');
 }
 
-function playerCardHtml(player) {
-  const s = stats(player);
-  const expanded = expandedIds.has(player.id);
-
+function playerCardHtml(p){
+  const s=stats(p),expanded=expandedIds.has(p.id);
   let badgeHtml;
-  if (s.hasCashedOut) {
-    const color = s.net >= 0 ? '#2ECC71' : '#E74C3C';
-    const icon  = s.net >= 0 ? '📈' : '📉';
-    const text  = (s.net >= 0 ? '+' : '-') + fmt(s.net);
-    badgeHtml = `<span class="player-badge" style="color:${color}">${icon} ${text}</span>`;
-  } else {
-    badgeHtml = `<span class="player-badge" style="color:#FFD700">💰 ${fmt(s.totalAmount)}</span>`;
+  if(s.hasCashedOut){
+    const color=s.net>=0?'#2ECC71':'#E74C3C';
+    const icon=s.net>=0?'📈':'📉';
+    badgeHtml=`<span class="player-badge" style="color:${color}">${icon} ${s.net>=0?'+':'-'}${fmt(s.net)}</span>`;
+  }else{
+    badgeHtml=`<span class="player-badge" style="color:#FFD700">💰 ${fmt(s.totalAmount)}</span>`;
   }
-
-  let expandedHtml = '';
-  if (expanded) {
-    let breakdown = `${s.buyInCount} buy-in${s.buyInCount !== 1 ? 's' : ''}`;
-    if (s.rebuyCount > 0) breakdown += ` + ${s.rebuyCount} rebuy${s.rebuyCount !== 1 ? 's' : ''}`;
-
-    let netHtml = '';
-    if (s.hasCashedOut) {
-      const c = s.net >= 0 ? '#2ECC71' : '#E74C3C';
-      const t = (s.net >= 0 ? '🟢 Net: +' : '🔴 Net: -') + fmt(s.net);
-      netHtml = `<div class="net-label" style="color:${c}">${t}</div>`;
+  let expandedHtml='';
+  if(expanded){
+    let bd=`${s.buyInCount} buy-in${s.buyInCount!==1?'s':''}`;
+    if(s.rebuyCount>0)bd+=` + ${s.rebuyCount} rebuy${s.rebuyCount!==1?'s':''}`;
+    let netHtml='';
+    if(s.hasCashedOut){
+      const c=s.net>=0?'#2ECC71':'#E74C3C';
+      const t=(s.net>=0?'🟢 Net: +':'🔴 Net: -')+fmt(s.net);
+      netHtml=`<div class="net-label" style="color:${c}">${t}</div>`;
     }
-
-    expandedHtml = `
-      <div class="player-expanded">
-        <div class="divider"></div>
-        <div class="details-row">
-          <span class="breakdown">♠ ${breakdown}</span>
-          <span class="player-total">${fmt(s.totalAmount)}</span>
-          <button class="btn-round" onclick="undoRebuy('${player.id}')" title="Remove last $30 rebuy">&#8722;</button>
-          <button class="btn-round" onclick="quickRebuy('${player.id}')" title="Add $30 rebuy">+</button>
-        </div>
-        ${netHtml}
-        <div class="actions-row">
-          <button class="btn-outlined green" onclick="showCashOutDialog('${player.id}')">💵 Cash Out</button>
-          <button class="btn-outlined red"   onclick="confirmRemove('${player.id}')">✖ Remove</button>
-        </div>
-      </div>`;
+    expandedHtml=`<div class="player-expanded"><div class="divider"></div>
+      <div class="details-row">
+        <span class="breakdown">♠ ${bd}</span>
+        <span class="player-total">${fmt(s.totalAmount)}</span>
+        <button class="btn-round" onclick="undoRebuy('${p.id}')" title="Remove last $30 rebuy">&#8722;</button>
+        <button class="btn-round" onclick="quickRebuy('${p.id}')" title="Add $30 rebuy">+</button>
+      </div>${netHtml}
+      <div class="actions-row">
+        <button class="btn-outlined green" onclick="showCashOutDialog('${p.id}')">💵 Cash Out</button>
+        <button class="btn-outlined red"   onclick="confirmRemove('${p.id}')">✖ Remove</button>
+      </div></div>`;
   }
-
-  return `
-    <div class="player-card" id="pc-${player.id}">
-      <div class="player-header" onclick="toggleExpand('${player.id}')">
-        <span class="player-name">🃏 ${esc(player.name)}</span>
-        ${badgeHtml}
-        <span class="chevron">${expanded ? '▲' : '▼'}</span>
-      </div>
-      ${expandedHtml}
-    </div>`;
+  return`<div class="player-card" id="pc-${p.id}">
+    <div class="player-header" onclick="toggleExpand('${p.id}')">
+      <span class="player-name">🃏 ${esc(p.name)}</span>${badgeHtml}
+      <span class="chevron">${expanded?'▲':'▼'}</span>
+    </div>${expandedHtml}</div>`;
 }
 
-function toggleExpand(id) {
-  if (expandedIds.has(id)) expandedIds.delete(id); else expandedIds.add(id);
-  renderPlayers();
-}
+function toggleExpand(id){if(expandedIds.has(id))expandedIds.delete(id);else expandedIds.add(id);renderPlayers()}
 
-// ── Session ops ─────────────────────────────────────────────────────
-function createSession(name) {
-  const s = { id: uid(), name, date: Date.now(), players: [] };
-  db.sessions.unshift(s); save(); openSession(s.id);
+function createSession(name){const s={id:uid(),name,date:Date.now(),players:[]};db.sessions.unshift(s);save();openSession(s.id)}
+function confirmDeleteSession(id){
+  const s=db.sessions.find(s=>s.id===id);if(!s)return;
+  if(!confirm(`Delete "${s.name}"?`))return;
+  db.sessions=db.sessions.filter(s=>s.id!==id);save();renderSessions();
 }
-
-function confirmDeleteSession(id) {
-  const s = db.sessions.find(s => s.id === id); if (!s) return;
-  if (!confirm(`Delete "${s.name}"? This cannot be undone.`)) return;
-  db.sessions = db.sessions.filter(s => s.id !== id); save(); renderSessions();
+function renameSession(name){
+  const s=db.sessions.find(s=>s.id===currentSessionId);
+  if(s){s.name=name;save();renderSession();}
 }
-
-function renameSession(name) {
-  const s = db.sessions.find(s => s.id === currentSessionId);
-  if (s) { s.name = name; save(); renderSession(); }
+function addPlayer(name,amount){
+  const s=db.sessions.find(s=>s.id===currentSessionId);if(!s)return;
+  s.players.push({id:uid(),name,buyins:[{id:uid(),type:'BUYIN',amount,timestamp:Date.now()}]});
+  save();renderPlayers();
 }
-
-// ── Player ops ──────────────────────────────────────────────────────
-function addPlayer(name, amount) {
-  const s = db.sessions.find(s => s.id === currentSessionId); if (!s) return;
-  s.players.push({ id: uid(), name, buyins: [{ id: uid(), type: 'BUYIN', amount, timestamp: Date.now() }] });
-  save(); renderPlayers();
+function quickRebuy(pid){const p=findPlayer(pid);if(!p)return;p.buyins.push({id:uid(),type:'REBUY',amount:30,timestamp:Date.now()});save();renderPlayers()}
+function undoRebuy(pid){
+  const p=findPlayer(pid);if(!p)return;
+  const idx=[...p.buyins].reverse().findIndex(b=>b.type==='REBUY');
+  if(idx===-1)return;
+  p.buyins.splice(p.buyins.length-1-idx,1);save();renderPlayers();
 }
-
-function quickRebuy(pid) {
-  const p = findPlayer(pid); if (!p) return;
-  p.buyins.push({ id: uid(), type: 'REBUY', amount: 30, timestamp: Date.now() });
-  save(); renderPlayers();
+function cashOut(pid,amount){
+  const p=findPlayer(pid);if(!p)return;
+  p.buyins=p.buyins.filter(b=>b.type!=='CASHOUT');
+  p.buyins.push({id:uid(),type:'CASHOUT',amount,timestamp:Date.now()});
+  save();renderPlayers();
 }
-
-function undoRebuy(pid) {
-  const p = findPlayer(pid); if (!p) return;
-  const idx = [...p.buyins].reverse().findIndex(b => b.type === 'REBUY');
-  if (idx === -1) return;
-  p.buyins.splice(p.buyins.length - 1 - idx, 1); save(); renderPlayers();
+function confirmRemove(pid){
+  const p=findPlayer(pid);if(!p)return;
+  if(!confirm(`Remove ${p.name}?`))return;
+  const s=db.sessions.find(s=>s.id===currentSessionId);
+  if(s){s.players=s.players.filter(pl=>pl.id!==pid);expandedIds.delete(pid);save();renderPlayers();}
 }
+function findPlayer(pid){const s=db.sessions.find(s=>s.id===currentSessionId);return s?.players.find(p=>p.id===pid)}
 
-function cashOut(pid, amount) {
-  const p = findPlayer(pid); if (!p) return;
-  p.buyins = p.buyins.filter(b => b.type !== 'CASHOUT');
-  p.buyins.push({ id: uid(), type: 'CASHOUT', amount, timestamp: Date.now() });
-  save(); renderPlayers();
+function openDialog(html){
+  const dlg=document.getElementById('dialog'),ov=document.getElementById('overlay');
+  dlg.innerHTML=html;dlg.classList.add('active');
+  ov.classList.remove('clear');ov.classList.add('active');
+  setTimeout(()=>{const inp=dlg.querySelector('input');if(inp){inp.focus();inp.select&&inp.select()}},60);
 }
-
-function confirmRemove(pid) {
-  const p = findPlayer(pid); if (!p) return;
-  if (!confirm(`Remove ${p.name} from this session?`)) return;
-  const s = db.sessions.find(s => s.id === currentSessionId);
-  if (s) { s.players = s.players.filter(pl => pl.id !== pid); expandedIds.delete(pid); save(); renderPlayers(); }
-}
-
-function findPlayer(pid) {
-  const s = db.sessions.find(s => s.id === currentSessionId);
-  return s?.players.find(p => p.id === pid);
-}
-
-// ── Dialogs ─────────────────────────────────────────────────────────
-function openDialog(html) {
-  const dlg = document.getElementById('dialog');
-  const ov  = document.getElementById('overlay');
-  dlg.innerHTML = html;
-  dlg.classList.add('active');
-  ov.classList.remove('clear'); ov.classList.add('active');
-  setTimeout(() => { const inp = dlg.querySelector('input'); if (inp) { inp.focus(); inp.select && inp.select(); } }, 60);
-}
-
-function closeDialog() {
-  document.getElementById('dialog').classList.remove('active');
-  document.getElementById('overlay').classList.remove('active', 'clear');
-}
-
-function handleOverlayClick() {
-  if (document.getElementById('session-menu').classList.contains('open')) { closeMenu(); return; }
+function closeDialog(){document.getElementById('dialog').classList.remove('active');document.getElementById('overlay').classList.remove('active','clear')}
+function handleOverlayClick(){
+  if(document.getElementById('session-menu').classList.contains('open')){closeMenu();return}
   closeDialog();
 }
-
-function showNewSessionDialog() {
-  openDialog(`
-    <div class="dialog-title gold-text">♠ New Session</div>
-    <input type="text" id="inp-sname" value="${esc(defaultName())}" placeholder="Session name" />
+function showNewSessionDialog(){
+  openDialog(`<div class="dialog-title gold-text">♠ New Session</div>
+    <input type="text" id="inp-sname" value="${esc(defaultName())}" placeholder="Session name"/>
     <div class="dialog-actions">
       <button class="btn-dialog cancel" onclick="closeDialog()">Cancel</button>
       <button class="btn-dialog confirm" onclick="submitNewSession()">Create ♦</button>
     </div>`);
 }
-
-function submitNewSession() {
-  const v = document.getElementById('inp-sname')?.value.trim();
-  if (v) { closeDialog(); createSession(v); }
-}
-
-function showAddPlayerDialog() {
-  openDialog(`
-    <div class="dialog-title gold-text">🃏 Add Player</div>
-    <input type="text" id="inp-pname" placeholder="Player name" autocomplete="off" />
-    <input type="number" id="inp-buyin" value="30" placeholder="Buy-in ($)" inputmode="decimal" min="0" step="0.01" />
+function submitNewSession(){const v=document.getElementById('inp-sname')?.value.trim();if(v){closeDialog();createSession(v)}}
+function showAddPlayerDialog(){
+  openDialog(`<div class="dialog-title gold-text">🃏 Add Player</div>
+    <input type="text" id="inp-pname" placeholder="Player name" autocomplete="off"/>
+    <input type="number" id="inp-buyin" value="30" placeholder="Buy-in ($)" inputmode="decimal" min="0" step="0.01"/>
     <div class="dialog-actions">
       <button class="btn-dialog cancel" onclick="closeDialog()">Cancel</button>
       <button class="btn-dialog confirm" onclick="submitAddPlayer()">Add ♣</button>
     </div>`);
 }
-
-function submitAddPlayer() {
-  const name   = document.getElementById('inp-pname')?.value.trim();
-  const amount = parseFloat(document.getElementById('inp-buyin')?.value) || 0;
-  if (name) { closeDialog(); addPlayer(name, amount); }
+function submitAddPlayer(){
+  const name=document.getElementById('inp-pname')?.value.trim();
+  const amount=parseFloat(document.getElementById('inp-buyin')?.value)||0;
+  if(name){closeDialog();addPlayer(name,amount)}
 }
-
-function showCashOutDialog(pid) {
-  const p = findPlayer(pid); if (!p) return;
-  const s = stats(p);
-  openDialog(`
-    <div class="dialog-title gold-text">💵 Cash Out</div>
-    <div class="dialog-info">${esc(p.name)} &nbsp;·&nbsp; Total in: ${fmt(s.totalAmount)}</div>
-    <input type="number" id="inp-cashout" placeholder="Chips returned ($)" inputmode="decimal" min="0" step="0.01" />
+function showCashOutDialog(pid){
+  const p=findPlayer(pid);if(!p)return;const s=stats(p);
+  openDialog(`<div class="dialog-title gold-text">💵 Cash Out</div>
+    <div class="dialog-info">${esc(p.name)} · Total in: ${fmt(s.totalAmount)}</div>
+    <input type="number" id="inp-cashout" placeholder="Chips returned ($)" inputmode="decimal" min="0" step="0.01"/>
     <div class="dialog-actions">
       <button class="btn-dialog cancel" onclick="closeDialog()">Cancel</button>
       <button class="btn-dialog confirm" onclick="submitCashOut('${pid}')">Settle ♥</button>
     </div>`);
 }
-
-function submitCashOut(pid) {
-  const amount = parseFloat(document.getElementById('inp-cashout')?.value) || 0;
-  closeDialog(); cashOut(pid, amount);
-}
-
-function showRenameDialog() {
+function submitCashOut(pid){const amount=parseFloat(document.getElementById('inp-cashout')?.value)||0;closeDialog();cashOut(pid,amount)}
+function showRenameDialog(){
   closeMenu();
-  const s = db.sessions.find(s => s.id === currentSessionId); if (!s) return;
-  openDialog(`
-    <div class="dialog-title gold-text">✏️ Rename Session</div>
-    <input type="text" id="inp-rename" value="${esc(s.name)}" />
+  const s=db.sessions.find(s=>s.id===currentSessionId);if(!s)return;
+  openDialog(`<div class="dialog-title gold-text">✏️ Rename Session</div>
+    <input type="text" id="inp-rename" value="${esc(s.name)}"/>
     <div class="dialog-actions">
       <button class="btn-dialog cancel" onclick="closeDialog()">Cancel</button>
       <button class="btn-dialog confirm" onclick="submitRename()">Rename ♠</button>
     </div>`);
 }
+function submitRename(){const v=document.getElementById('inp-rename')?.value.trim();if(v){closeDialog();renameSession(v)}}
 
-function submitRename() {
-  const v = document.getElementById('inp-rename')?.value.trim();
-  if (v) { closeDialog(); renameSession(v); }
+function toggleMenu(){
+  const menu=document.getElementById('session-menu'),ov=document.getElementById('overlay');
+  if(menu.classList.contains('open'))closeMenu();
+  else{menu.classList.add('open');ov.classList.add('active','clear')}
 }
+function closeMenu(){document.getElementById('session-menu').classList.remove('open');document.getElementById('overlay').classList.remove('active','clear')}
 
-// ── Menu ─────────────────────────────────────────────────────────────
-function toggleMenu() {
-  const menu = document.getElementById('session-menu');
-  const ov   = document.getElementById('overlay');
-  if (menu.classList.contains('open')) { closeMenu(); }
-  else { menu.classList.add('open'); ov.classList.add('active', 'clear'); }
-}
-function closeMenu() {
-  document.getElementById('session-menu').classList.remove('open');
-  document.getElementById('overlay').classList.remove('active', 'clear');
-}
-
-// ── Keyboard ─────────────────────────────────────────────────────────
-document.addEventListener('keydown', e => {
-  if (e.key === 'Enter') { const b = document.querySelector('#dialog .btn-dialog.confirm'); if (b) b.click(); }
-  if (e.key === 'Escape') {
-    if (document.getElementById('session-menu').classList.contains('open')) { closeMenu(); return; }
-    if (document.getElementById('dialog').classList.contains('active')) closeDialog();
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'){const b=document.querySelector('#dialog .btn-dialog.confirm');if(b)b.click()}
+  if(e.key==='Escape'){
+    if(document.getElementById('session-menu').classList.contains('open')){closeMenu();return}
+    if(document.getElementById('dialog').classList.contains('active'))closeDialog();
   }
 });
 
-// ── PWA ──────────────────────────────────────────────────────────────
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
-}
+if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));
 
-// ── Boot ─────────────────────────────────────────────────────────────
-load();
-renderSessions();
+load();renderSessions();
 </script>
 </body>
 </html>
