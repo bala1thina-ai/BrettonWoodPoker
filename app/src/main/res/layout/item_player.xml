@@ -5,10 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="8dp"
-    android:layout_marginVertical="3dp"
-    app:cardBackgroundColor="#0F3460"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="3dp">
+    android:layout_marginVertical="4dp"
+    app:cardBackgroundColor="#04142A"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="4dp"
+    app:strokeColor="#33FFD700"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,13 +19,13 @@
         android:paddingHorizontal="14dp"
         android:paddingVertical="10dp">
 
-        <!-- Collapsed header — always visible, tap to expand -->
+        <!-- Collapsed header -->
         <LinearLayout
             android:id="@+id/layoutHeader"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:minHeight="40dp"
+            android:minHeight="44dp"
             android:orientation="horizontal">
 
             <TextView
@@ -48,12 +50,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="▼"
-                android:textColor="#E2B96F"
+                android:textColor="@color/gold"
                 android:textSize="11sp" />
 
         </LinearLayout>
 
-        <!-- Expanded details — hidden by default -->
+        <!-- Expanded section -->
         <LinearLayout
             android:id="@+id/layoutExpanded"
             android:layout_width="match_parent"
@@ -66,7 +68,7 @@
                 android:layout_height="1dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:background="#44E2B96F" />
+                android:background="#44FFD700" />
 
             <!-- Breakdown | Total | [−] [+] -->
             <LinearLayout
@@ -80,7 +82,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:textColor="#9E9E9E"
+                    android:textColor="@color/text_secondary"
                     android:textSize="12sp" />
 
                 <TextView
@@ -88,7 +90,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
-                    android:textColor="#E2B96F"
+                    android:textColor="@color/gold"
                     android:textSize="15sp"
                     android:textStyle="bold" />
 
@@ -104,10 +106,10 @@
                     android:insetTop="0dp"
                     android:padding="0dp"
                     android:text="-"
-                    android:textColor="#E2B96F"
+                    android:textColor="@color/gold"
                     android:textSize="18sp"
                     app:cornerRadius="18dp"
-                    app:strokeColor="#E2B96F" />
+                    app:strokeColor="@color/gold" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/btnPlus"
@@ -120,14 +122,14 @@
                     android:insetTop="0dp"
                     android:padding="0dp"
                     android:text="+"
-                    android:textColor="#E2B96F"
+                    android:textColor="@color/gold"
                     android:textSize="18sp"
                     app:cornerRadius="18dp"
-                    app:strokeColor="#E2B96F" />
+                    app:strokeColor="@color/gold" />
 
             </LinearLayout>
 
-            <!-- Net result (shown after cash out) -->
+            <!-- Net result -->
             <TextView
                 android:id="@+id/tvNet"
                 android:layout_width="wrap_content"
@@ -149,10 +151,10 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Cash Out"
-                    android:textColor="#2ECC71"
+                    android:text="💵 Cash Out"
+                    android:textColor="@color/green"
                     android:textSize="12sp"
-                    app:strokeColor="#2ECC71" />
+                    app:strokeColor="@color/green" />
 
                 <Space
                     android:layout_width="0dp"
@@ -164,10 +166,10 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Remove"
-                    android:textColor="#E74C3C"
+                    android:text="✖ Remove"
+                    android:textColor="@color/red"
                     android:textSize="12sp"
-                    app:strokeColor="#E74C3C" />
+                    app:strokeColor="@color/red" />
 
             </LinearLayout>
 

@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background">#1A1A2E</color>
-    <color name="surface">#16213E</color>
-    <color name="card">#0F3460</color>
-    <color name="gold">#E2B96F</color>
-    <color name="gold_dark">#C49A3C</color>
+    <color name="background">#071628</color>
+    <color name="surface">#040C1E</color>
+    <color name="card">#040E28</color>
+    <color name="gold">#FFD700</color>
+    <color name="gold_dark">#B8860B</color>
+    <color name="gold_stroke">#44FFD700</color>
+    <color name="cyan">#00DFFF</color>
     <color name="green">#2ECC71</color>
     <color name="red">#E74C3C</color>
     <color name="text_primary">#FFFFFF</color>
-    <color name="text_secondary">#9E9E9E</color>
+    <color name="text_secondary">#00BFDF</color>
 </resources>

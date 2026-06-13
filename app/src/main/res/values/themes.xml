@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="ToolbarTitle" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textColor">#FFD700</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="Theme.BrettonWoodPoker" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/gold</item>
         <item name="colorPrimaryVariant">@color/gold_dark</item>
@@ -10,7 +16,7 @@
         <item name="colorOnSurface">@color/text_primary</item>
         <item name="android:colorBackground">@color/background</item>
         <item name="colorOnBackground">@color/text_primary</item>
-        <item name="android:statusBarColor">@color/surface</item>
-        <item name="android:navigationBarColor">@color/background</item>
+        <item name="android:statusBarColor">#03060E</item>
+        <item name="android:navigationBarColor">#04081A</item>
     </style>
 </resources>

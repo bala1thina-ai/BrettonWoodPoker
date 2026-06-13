@@ -4,23 +4,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background">
+    android:background="@drawable/bg_pool">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/surface"
-        app:elevation="4dp">
+        android:background="@drawable/bg_toolbar"
+        app:elevation="6dp">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="@color/surface"
-            app:title="BrettonWood Poker"
+            android:background="@drawable/bg_toolbar"
+            app:title="♠ BrettonWood Poker ♥"
             app:titleTextColor="@color/gold"
-            app:logo="@drawable/ic_launcher_foreground"
-            app:logoDescription="BrettonWood Poker Logo" />
+            app:titleTextAppearance="@style/ToolbarTitle" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="No sessions yet.\nTap + to start a new game."
+            android:text="♠ ♥ ♦ ♣\n\nNo sessions yet.\nTap + to start a new game."
             android:textAlignment="center"
             android:textColor="@color/text_secondary"
             android:textSize="16sp"
